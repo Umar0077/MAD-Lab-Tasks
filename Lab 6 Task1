@@ -1,0 +1,75 @@
+Task:01 
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+
+export default function App() {
+  const [board, setBoard] = useState(Array(9).fill(''));
+  const [currentPlayer, setCurrentPlayer] = useState('X');
+
+  const handlePress = (index) => {
+    const updatedBoard = [...board];
+    if (updatedBoard[index] === '') {
+      updatedBoard[index] = currentPlayer;
+      setBoard(updatedBoard);
+      setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.board}>
+        {board.map((cell, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.cell}
+            onPress={() => handlePress(index)}
+          >
+            <Text style={styles.cellText}>{cell}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={styles.info}>
+        <Text style={styles.playerText}>Player 1 = X</Text>
+        <Text style={styles.playerText}>Player 2 = O</Text>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  board: {
+    width: 300,
+    height: 300,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    borderWidth: 2,
+    borderColor: '#000',
+  },
+  cell: {
+    width: '33.33%',
+    height: '33.33%',
+    borderWidth: 1,
+    borderColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cellText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+  },
+  info: {
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  playerText: {
+    fontSize: 18,
+    fontWeight: '500',
+  },
+});
+
