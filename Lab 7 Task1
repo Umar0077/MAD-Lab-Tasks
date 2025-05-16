@@ -1,0 +1,176 @@
+Task :1
+import React, { useState } from 'react';
+import {
+  View, Text, TextInput, Button, StyleSheet,
+  Modal, TouchableOpacity, ScrollView
+} from 'react-native';
+
+export default function App() {
+  const [price, setPrice] = useState('');
+  const [discount, setDiscount] = useState('');
+  const [history, setHistory] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const validInputs = () => {
+    const p = parseFloat(price);
+    const d = parseFloat(discount);
+    return !isNaN(p) && !isNaN(d) && p > 0 && d >= 0 && d <= 100;
+  };
+
+  const calculateDiscount = () => {
+    const p = parseFloat(price);
+    const d = parseFloat(discount);
+    const saved = (p * d) / 100;
+    const final = p - saved;
+    return {
+      saved: saved.toFixed(2),
+      final: final.toFixed(2)
+    };
+  };
+
+  const handleSave = () => {
+    if (validInputs()) {
+      const { saved, final } = calculateDiscount();
+      const newEntry = {
+        original: parseFloat(price).toFixed(2),
+        discount: parseFloat(discount).toFixed(2),
+        final,
+        saved
+      };
+      setHistory([newEntry, ...history]);
+      setPrice('');
+      setDiscount('');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Discount Calculator</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Original Price"
+        keyboardType="numeric"
+        value={price}
+        onChangeText={setPrice}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Discount %"
+        keyboardType="numeric"
+        value={discount}
+        onChangeText={setDiscount}
+      />
+
+      {validInputs() && (
+        <View style={styles.resultBox}>
+          <Text style={styles.result}>You Save: ₹ {calculateDiscount().saved}</Text>
+          <Text style={styles.result}>Final Price: ₹ {calculateDiscount().final}</Text>
+        </View>
+      )}
+
+      <View style={styles.buttons}>
+        <Button title="Save" onPress={handleSave} />
+        <Button title="View History" onPress={() => setModalVisible(true)} />
+      </View>
+
+      <Modal visible={modalVisible} animationType="slide">
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalHeader}>Saved Calculations</Text>
+          <ScrollView>
+            {history.length === 0 ? (
+              <Text style={styles.noHistory}>No history found.</Text>
+            ) : (
+              history.map((item, index) => (
+                <View key={index} style={styles.historyItem}>
+                  <Text>Original Price: ₹ {item.original}</Text>
+                  <Text>Discount: {item.discount}%</Text>
+                  <Text>Saved: ₹ {item.saved}</Text>
+                  <Text>Final Price: ₹ {item.final}</Text>
+                </View>
+              ))
+            )}
+          </ScrollView>
+          <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+            <Text style={styles.closeText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </View>
+  );
+}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    backgroundColor: '#f4f4f4',
+  },
+  header: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#4a148c',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#aaa',
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 15,
+    fontSize: 16,
+  },
+  resultBox: {
+    marginBottom: 20,
+    backgroundColor: '#e0f7fa',
+    padding: 15,
+    borderRadius: 8,
+  },
+  result: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#00796b',
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 25,
+  },
+  modalContainer: {
+    flex: 1,
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+  },
+  modalHeader: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#4a148c',
+    textAlign: 'center',
+  },
+  historyItem: {
+    padding: 12,
+    marginBottom: 10,
+    backgroundColor: '#f1f8e9',
+    borderRadius: 8,
+  },
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: '#4a148c',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  closeText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  noHistory: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#aaa',
+  },
+});
