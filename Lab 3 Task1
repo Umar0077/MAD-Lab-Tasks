@@ -1,0 +1,17 @@
+function sortOddNumbers(arr) {
+  const sortedOdds = arr
+    .filter(num => num % 2 !== 0)
+    .sort((a, b) => a - b);
+
+  let oddIndex = 0;
+  return arr.map(num => {
+    if (num % 2 !== 0) {
+      return sortedOdds[oddIndex++];
+    }
+    return num;
+  });
+}
+
+console.log(sortOddNumbers([7, 1]));               
+console.log(sortOddNumbers([5, 8, 6, 3, 4]));      
+console.log(sortOddNumbers([9,8,7,6,5,4,3,2,1,0])); 
