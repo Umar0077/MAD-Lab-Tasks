@@ -1,0 +1,44 @@
+class Employee {
+  constructor(name = "", dept = "general") {
+    this.name = name;
+    this.dept = dept;
+  }
+}
+
+class Manager extends Employee {
+  constructor(name, dept, reports = []) {
+    super(name, dept);
+    this.reports = reports;  // array of Employee objects
+  }
+}
+
+class WorkerBee extends Employee {
+  constructor(name, dept, projects = []) {
+    super(name, dept);
+    this.projects = projects;  // array of strings
+  }
+}
+
+class SalesPerson extends WorkerBee {
+  constructor(name, projects = [], quota = 100) {
+    super(name, "sales", projects);  // override dept with "sales"
+    this.quota = quota;
+  }
+}
+
+class Engineer extends WorkerBee {
+  constructor(name, projects = [], machine = "") {
+    super(name, "engineering", projects);  // override dept with "engineering"
+    this.machine = machine;
+  }
+}
+
+// Example usage:
+
+const manager = new Manager("Alice Manager", "management");
+const engineer = new Engineer("Bob Engineer", ["Project A", "Project B"], "3D Printer");
+const salesperson = new SalesPerson("Charlie Sales", ["Project X", "Project Y"], 150);
+
+console.log(manager);
+console.log(engineer);
+console.log(salesperson);
