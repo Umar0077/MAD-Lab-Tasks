@@ -1,0 +1,139 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  FlatList,
+  StyleSheet,
+  Alert,
+} from "react-native";
+
+export default function StudentMarksForm() {
+  const [studentName, setStudentName] = useState("");
+  const [subject1, setSubject1] = useState("");
+  const [subject2, setSubject2] = useState("");
+  const [subject3, setSubject3] = useState("");
+  const [listData, setListData] = useState([]);
+
+  const isFormValid =
+    studentName.trim() &&
+    subject1.trim() &&
+    subject2.trim() &&
+    subject3.trim();
+
+  const handleSubmit = () => {
+    const newEntry = {
+      id: Date.now().toString(),
+      name: studentName,
+      marks: [subject1, subject2, subject3],
+    };
+    setListData((prev) => [...prev, newEntry]);
+    // Clear inputs after submit
+    setStudentName("");
+    setSubject1("");
+    setSubject2("");
+    setSubject3("");
+  };
+
+  const handleReset = () => {
+    setStudentName("");
+    setSubject1("");
+    setSubject2("");
+    setSubject3("");
+    setListData([]);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>Student Name:</Text>
+      <TextInput
+        style={styles.input}
+        value={studentName}
+        onChangeText={setStudentName}
+        placeholder="Enter Name"
+      />
+
+      <Text style={styles.label}>Subject 1 Marks:</Text>
+      <TextInput
+        style={styles.input}
+        value={subject1}
+        onChangeText={setSubject1}
+        placeholder="Enter Marks"
+        keyboardType="numeric"
+      />
+
+      <Text style={styles.label}>Subject 2 Marks:</Text>
+      <TextInput
+        style={styles.input}
+        value={subject2}
+        onChangeText={setSubject2}
+        placeholder="Enter Marks"
+        keyboardType="numeric"
+      />
+
+      <Text style={styles.label}>Subject 3 Marks:</Text>
+      <TextInput
+        style={styles.input}
+        value={subject3}
+        onChangeText={setSubject3}
+        placeholder="Enter Marks"
+        keyboardType="numeric"
+      />
+
+      <View style={styles.buttonRow}>
+        <Button title="Reset" onPress={handleReset} />
+        <Button
+          title="Submit"
+          onPress={handleSubmit}
+          disabled={!isFormValid}
+        />
+      </View>
+
+      <FlatList
+        data={listData}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.listItem}>
+            <Text style={styles.listText}>
+              {item.name} - Marks: {item.marks.join(", ")}
+            </Text>
+          </View>
+        )}
+        ListEmptyComponent={<Text>No entries yet</Text>}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    flex: 1,
+  },
+  label: {
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#555",
+    borderRadius: 4,
+    padding: 8,
+    marginTop: 5,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
+  listItem: {
+    marginTop: 15,
+    padding: 10,
+    backgroundColor: "#eee",
+    borderRadius: 5,
+  },
+  listText: {
+    fontSize: 16,
+  },
+});
