@@ -1,0 +1,282 @@
+//APP.js Code
+
+
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+
+import HomeScreen from './Screens/HomeScreen';
+import ProductsList from './Screens/ProductList';
+import ProductDetails from './Screens/ProductDetails';
+import EmployeesList from './Screens/EmployeesList';
+import EmployeeDetails from './Screens/EmployeesDetails';
+import OrdersList from './Screens/OrderList';
+import OrderDetails from './Screens/OrderDetails';
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="ProductsList" component={ProductsList} />
+        <Stack.Screen name="ProductDetails" component={ProductDetails} />
+        <Stack.Screen name="EmployeesList" component={EmployeesList} />
+        <Stack.Screen name="EmployeeDetails" component={EmployeeDetails} />
+        <Stack.Screen name="OrdersList" component={OrdersList} />
+        <Stack.Screen name="OrderDetails" component={OrderDetails} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+
+
+
+//Screens
+//EMployees Details
+import React from 'react';
+import { View, Text } from 'react-native';
+
+export default function EmployeeDetails({ route }) {
+  const { employee } = route.params;
+  return (
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 22 }}>Employee Details</Text>
+      <Text>Name: {employee.name}</Text>
+      <Text>Designation: {employee.designation}</Text>
+    </View>
+  );
+}
+
+// Employees List
+
+import React from 'react';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+
+const employees = [
+  { id: '1', name: 'John Doe', designation: 'Manager' },
+  { id: '2', name: 'Jane Smith', designation: 'Sales' },
+];
+
+export default function EmployeesList({ navigation }) {
+  return (
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 22, marginBottom: 10 }}>Employees List</Text>
+      <FlatList
+        data={employees}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('EmployeeDetails', { employee: item })}
+            style={{
+              padding: 10,
+              marginBottom: 10,
+              backgroundColor: '#eee',
+              borderRadius: 5,
+            }}>
+            <Text>{item.name} - {item.designation}</Text>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
+}
+
+
+
+//Home Screen
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+
+export default function HomeScreen({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Admin Dashboard</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ProductsList')}>
+        <Text>Manage Products</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('EmployeesList')}>
+        <Text>Manage Employees</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('OrdersList')}>
+        <Text>Manage Orders</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  title: { fontSize: 24, marginBottom: 20 },
+  button: {
+    padding: 12,
+    backgroundColor: '#ccc',
+    borderRadius: 8,
+    marginVertical: 10,
+    width: 200,
+    alignItems: 'center'
+  },
+});
+
+
+
+
+//Order Details
+import React from 'react';
+import { View, Text } from 'react-native';
+
+export default function OrderDetails({ route }) {
+  const { order } = route.params;
+  return (
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 22 }}>Order Details</Text>
+      <Text>Order No: {order.orderNo}</Text>
+      <Text>Customer: {order.customer}</Text>
+      <Text>Price: ${order.price}</Text>
+    </View>
+  );
+}
+
+
+//OrderList
+import React from 'react';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+
+const orders = [
+  { id: '1', orderNo: 'ORD001', customer: 'Alice', price: '500' },
+  { id: '2', orderNo: 'ORD002', customer: 'Bob', price: '750' },
+];
+
+export default function OrdersList({ navigation }) {
+  return (
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 22, marginBottom: 10 }}>Orders List</Text>
+      <FlatList
+        data={orders}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('OrderDetails', { order: item })}
+            style={{
+              padding: 10,
+              marginBottom: 10,
+              backgroundColor: '#eee',
+              borderRadius: 5,
+            }}>
+            <Text>{item.orderNo} - {item.customer} - ${item.price}</Text>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
+}
+
+
+//product Details
+import React from 'react';
+import { View, Text } from 'react-native';
+
+export default function ProductDetails({ route }) {
+  const { product } = route.params;
+  return (
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 22 }}>Product Details</Text>
+      <Text>Name: {product.name}</Text>
+      <Text>Price: ${product.price}</Text>
+    </View>
+  );
+}
+
+
+//Product List
+import React from 'react';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+
+const products = [
+  { id: '1', name: 'Laptop', price: '1200' },
+  { id: '2', name: 'Phone', price: '800' },
+];
+
+export default function ProductsList({ navigation }) {
+  return (
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 22, marginBottom: 10 }}>Product List</Text>
+      <FlatList
+        data={products}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ProductDetails', { product: item })}
+            style={{
+              padding: 10,
+              marginBottom: 10,
+              backgroundColor: '#eee',
+              borderRadius: 5,
+            }}>
+            <Text>{item.name} - ${item.price}</Text>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
