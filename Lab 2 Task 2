@@ -62,8 +62,6 @@ function SolveThis(obj) {
   return res;
 }
 
-// Show output for Lab Task 2
-console.log("Lab Task 2 Output:");
 const inputObj = {
   sum: [3, 2, 4],
   max: [2, 4, 3, 5],
@@ -76,5 +74,11 @@ const inputObj = {
   multiply: [2, 3, 4],
   divide: [100, 2, 5]
 };
-const outputObj = SolveThis(inputObj);
-console.log(outputObj);
+
+console.log(SolveThis(inputObj));
+
+function add(a, b, c) { /* ... */ }
+function subtract(a = 0, b = 0, c = 0) { /* ... */ }
+function multiply(...nums) { /* ... */ }
+function divide() { /* ... */ }
+
