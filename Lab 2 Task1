@@ -1,0 +1,72 @@
+function Person(name = "Unknown", age = 0, gender = "Unknown") {
+  this.name = name;
+  this.age = age;
+  this.gender = gender;
+}
+
+function Student(name, age, gender, studentId = "N/A", course = "N/A") {
+  Person.call(this, name, age, gender);  // Call Person constructor
+  this.studentId = studentId;
+  this.course = course;
+}
+
+Student.prototype = Object.create(Person.prototype);
+Student.prototype.constructor = Student;
+
+function Employee(name, age, gender, department = "N/A", designation = "N/A", salary = 0) {
+  Person.call(this, name, age, gender);
+  this.department = department;
+  this.designation = designation;
+  this.salary = salary;
+}
+
+Employee.prototype = Object.create(Person.prototype);
+Employee.prototype.constructor = Employee;
+
+function Teacher(name, age, gender, department, designation, salary, subject = "N/A", experience = 0) {
+  Employee.call(this, name, age, gender, department, designation, salary);
+  this.subject = subject;
+  this.experience = experience; // years of experience
+}
+
+Teacher.prototype = Object.create(Employee.prototype);
+Teacher.prototype.constructor = Teacher;
+
+function Staff(name, age, gender, department, designation, salary, shift = "Day") {
+  Employee.call(this, name, age, gender, department, designation, salary);
+  this.shift = shift;
+}
+
+Staff.prototype = Object.create(Employee.prototype);
+Staff.prototype.constructor = Staff;
+
+// Utility function to print info for Person or derived types
+function printInfo(obj) {
+  console.log("---------");
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      console.log(`${key}: ${obj[key]}`);
+    }
+  }
+}
+
+const student1 = new Student("Alice", 20, "Female", "S1001", "Computer Science");
+const student2 = new Student("Bob", 22, "Male", "S1002", "Mathematics");
+
+const teacher1 = new Teacher("Dr. Smith", 45, "Male", "Science", "Professor", 70000, "Physics", 15);
+const teacher2 = new Teacher("Ms. Johnson", 38, "Female", "Mathematics", "Lecturer", 50000, "Algebra", 10);
+
+const staff1 = new Staff("Mr. Lee", 35, "Male", "Administration", "Clerk", 30000, "Morning");
+const staff2 = new Staff("Mrs. Davis", 40, "Female", "Maintenance", "Supervisor", 35000, "Night");
+
+console.log("Students:");
+printInfo(student1);
+printInfo(student2);
+
+console.log("\nTeachers:");
+printInfo(teacher1);
+printInfo(teacher2);
+
+console.log("\nStaff:");
+printInfo(staff1);
+printInfo(staff2);
