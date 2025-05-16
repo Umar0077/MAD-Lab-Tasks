@@ -1,0 +1,60 @@
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+
+export default function TicTacToe() {
+  // We'll just render the layout with buttons and player text (no game logic)
+  const [board, setBoard] = useState(Array(9).fill(null));
+
+  const renderButton = (index) => (
+    <TouchableOpacity style={styles.cell} key={index}>
+      <Text style={styles.cellText}>{board[index]}</Text>
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.board}>
+        {board.map((_, index) => renderButton(index))}
+      </View>
+      <View style={styles.playerTextContainer}>
+        <Text style={styles.playerText}>Player 1 = X</Text>
+        <Text style={styles.playerText}>Player 2 = O</Text>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  board: {
+    width: 300,
+    height: 300,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    borderWidth: 2,
+    borderColor: "#000",
+  },
+  cell: {
+    width: "33.33%",
+    height: "33.33%",
+    borderWidth: 1,
+    borderColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cellText: {
+    fontSize: 48,
+    fontWeight: "bold",
+  },
+  playerTextContainer: {
+    marginTop: 20,
+  },
+  playerText: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+});
