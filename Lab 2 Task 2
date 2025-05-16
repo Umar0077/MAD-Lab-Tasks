@@ -1,0 +1,80 @@
+function SolveThis(obj) {
+  const res = {};
+
+  for (const key in obj) {
+    const values = obj[key];
+
+    switch (key) {
+      case 'sum':
+        res[key] = add(...values);
+        break;
+
+      case 'subtract':
+        res[key] = subtract(...values);
+        break;
+
+      case 'multiply':
+        res[key] = multiply(...values);
+        break;
+
+      case 'divide':
+        try {
+          res[key] = divide(...values);
+        } catch (e) {
+          res[key] = e.message;
+        }
+        break;
+
+      case 'max':
+        res[key] = Math.max(...values);
+        break;
+
+      case 'min':
+        res[key] = Math.min(...values);
+        break;
+
+      case 'round':
+        res[key] = Math.round(values[0]);
+        break;
+
+      case 'abs':
+        res[key] = Math.abs(values[0]);
+        break;
+
+      case 'ceil':
+        res[key] = Math.ceil(values[0]);
+        break;
+
+      case 'floor':
+        res[key] = Math.floor(values[0]);
+        break;
+
+      case 'random':
+        res[key] = Math.random() * values[0];
+        break;
+
+      default:
+        res[key] = null;
+        break;
+    }
+  }
+
+  return res;
+}
+
+// Show output for Lab Task 2
+console.log("Lab Task 2 Output:");
+const inputObj = {
+  sum: [3, 2, 4],
+  max: [2, 4, 3, 5],
+  min: [5, 3, 4, 3],
+  round: [4.6],
+  abs: [-10],
+  ceil: [4.2],
+  floor: [4.8],
+  random: [10],
+  multiply: [2, 3, 4],
+  divide: [100, 2, 5]
+};
+const outputObj = SolveThis(inputObj);
+console.log(outputObj);
