@@ -1,0 +1,98 @@
+Lab task:2
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+
+export default function App() {
+  const [name, setName] = useState('');
+  const [marks1, setMarks1] = useState('');
+  const [marks2, setMarks2] = useState('');
+  const [marks3, setMarks3] = useState('');
+  const [students, setStudents] = useState([]);
+
+  const isFormValid = name && marks1 && marks2 && marks3;
+
+  const handleSubmit = () => {
+    const newStudent = {
+      key: Math.random().toString(),
+      name,
+      marks: [marks1, marks2, marks3],
+    };
+    setStudents([...students, newStudent]);
+    setName('');
+    setMarks1('');
+    setMarks2('');
+    setMarks3('');
+  };
+
+  const handleReset = () => {
+    setStudents([]);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>Student Name:</Text>
+      <TextInput style={styles.input} placeholder="Enter Name" value={name} onChangeText={setName} />
+
+      <Text style={styles.heading}>Subject 1 Marks:</Text>
+      <TextInput style={styles.input} placeholder="Enter Subject 1 Marks" keyboardType="numeric" value={marks1} onChangeText={setMarks1} />
+
+      <Text style={styles.heading}>Subject 2 Marks:</Text>
+      <TextInput style={styles.input} placeholder="Enter Subject 2 Marks" keyboardType="numeric" value={marks2} onChangeText={setMarks2} />
+
+      <Text style={styles.heading}>Subject 3 Marks:</Text>
+      <TextInput style={styles.input} placeholder="Enter Subject 3 Marks" keyboardType="numeric" value={marks3} onChangeText={setMarks3} />
+
+      <View style={styles.buttonContainer}>
+        <Button title="Reset" onPress={handleReset} />
+        <Button title="Submit" onPress={handleSubmit} disabled={!isFormValid} />
+      </View>
+<FlatList
+        style={styles.list}
+        data={students}
+        renderItem={({ item }) => (
+          <View style={styles.listItem}>
+            <Text>{item.name} - Marks: {item.marks.join(', ')}</Text>
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 50,
+  },
+  heading: {
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#aaa',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 15,
+  },
+  list: {
+    marginTop: 10,
+  },
+  listItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+  },
+});
+
+
+
+
+
+
+
