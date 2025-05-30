@@ -1,4 +1,4 @@
-// App.js
+
 
 import * as React from 'react';
 import { Button, View, Text, Alert } from 'react-native';
