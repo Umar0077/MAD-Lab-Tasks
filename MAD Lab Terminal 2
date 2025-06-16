@@ -1,0 +1,294 @@
+//React Native Math Function Calculator app
+
+
+//HomeScreen.js
+import React from 'react';
+import { View, Button, StyleSheet } from 'react-native';
+
+const HomeScreen = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Button
+        title="Measurement Converter"
+        onPress={() => navigation.navigate('MeasurementConverter')}
+      />
+      <Button
+        title="BMI Calculator"
+        onPress={() => navigation.navigate('BMICalculator')}
+      />
+      <Button
+        title="Currency Converter"
+        onPress={() => navigation.navigate('CurrencyConverter')}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', padding: 20 },
+});
+
+export default HomeScreen;
+
+
+
+//MeasurementConverter.js
+
+
+import React, { useState } from 'react';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+
+const MeasurementConverter = ({ navigation }) => {
+  const [length, setLength] = useState('');
+  const [weight, setWeight] = useState('');
+  const [temperature, setTemperature] = useState('');
+  const [convertedValue, setConvertedValue] = useState('');
+
+  const convertLength = () => {
+    const meters = parseFloat(length);
+    if (!isNaN(meters)) {
+      setConvertedValue(`${meters} meters = ${meters * 3.281} feet`);
+    }
+  };
+
+  const convertWeight = () => {
+    const kg = parseFloat(weight);
+    if (!isNaN(kg)) {
+      setConvertedValue(`${kg} kg = ${kg * 2.205} pounds`);
+    }
+  };
+
+  const convertTemperature = () => {
+    const celsius = parseFloat(temperature);
+    if (!isNaN(celsius)) {
+      setConvertedValue(`${celsius}°C = ${(celsius * 9) / 5 + 32}°F`);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Length in meters"
+        value={length}
+        onChangeText={setLength}
+        keyboardType="numeric"
+      />
+      <Button title="Convert Length" onPress={convertLength} />
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Weight in kg"
+        value={weight}
+        onChangeText={setWeight}
+        keyboardType="numeric"
+      />
+      <Button title="Convert Weight" onPress={convertWeight} />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Temperature in °C"
+        value={temperature}
+        onChangeText={setTemperature}
+        keyboardType="numeric"
+      />
+      <Button title="Convert Temperature" onPress={convertTemperature} />
+
+      <Text style={styles.result}>{convertedValue}</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', padding: 20 },
+  input: { height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingLeft: 8 },
+  result: { marginTop: 20, fontSize: 18 },
+});
+
+export default MeasurementConverter;
+
+
+
+
+//BMICalculator.js
+
+
+import React, { useState } from 'react';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+
+const BMICalculator = () => {
+  const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState('');
+  const [bmi, setBmi] = useState('');
+  const [category, setCategory] = useState('');
+
+  const calculateBMI = () => {
+    const weightInKg = parseFloat(weight);
+    const heightInM = parseFloat(height) / 100; // Convert height to meters
+    if (!isNaN(weightInKg) && !isNaN(heightInM)) {
+      const bmiResult = weightInKg / (heightInM * heightInM);
+      setBmi(bmiResult.toFixed(1));
+
+      if (bmiResult < 18.5) {
+        setCategory('Underweight');
+      } else if (bmiResult < 24.9) {
+        setCategory('Normal');
+      } else if (bmiResult < 29.9) {
+        setCategory('Overweight');
+      } else {
+        setCategory('Obese');
+      }
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Weight in kg"
+        value={weight}
+        onChangeText={setWeight}
+        keyboardType="numeric"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Height in cm"
+        value={height}
+        onChangeText={setHeight}
+        keyboardType="numeric"
+      />
+      <Button title="Calculate BMI" onPress={calculateBMI} />
+
+      <Text style={styles.result}>
+        BMI: {bmi} ({category})
+      </Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', padding: 20 },
+  input: { height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingLeft: 8 },
+  result: { marginTop: 20, fontSize: 18 },
+});
+
+export default BMICalculator;
+
+
+//CurrencyConverter.js
+
+import React, { useState } from 'react';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+
+const CurrencyConverter = () => {
+  const [amount, setAmount] = useState('');
+  const [convertedAmount, setConvertedAmount] = useState('');
+
+  const convertCurrency = () => {
+    const amountInUSD = parseFloat(amount);
+    if (!isNaN(amountInUSD)) {
+      setConvertedAmount(`${amountInUSD} USD = ${amountInUSD * 278.50} PKR`); // Conversion rate
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Amount in USD"
+        value={amount}
+        onChangeText={setAmount}
+        keyboardType="numeric"
+      />
+      <Button title="Convert Currency" onPress={convertCurrency} />
+      
+      <Text style={styles.result}>{convertedAmount}</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', padding: 20 },
+  input: { height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingLeft: 8 },
+  result: { marginTop: 20, fontSize: 18 },
+});
+
+export default CurrencyConverter;
+
+
+
+//HistoryScreen.js
+
+
+import React from 'react';
+import { View, FlatList, Text, Button, StyleSheet } from 'react-native';
+
+const HistoryScreen = ({ route }) => {
+  const { history, clearHistory } = route.params;
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={history}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <Text style={styles.item}>{item.data}</Text>
+        )}
+      />
+      <Button title="Clear History" onPress={clearHistory} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { padding: 15 },
+  item: {
+    fontSize: 18,
+    marginBottom: 10,
+    borderBottomWidth: 2,
+    borderColor: 'gray',
+    paddingBottom: 6
+  }
+});
+
+export default HistoryScreen;
+
+
+
+//App.js
+
+
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './HomeScreen';
+import MeasurementConverter from './MeasurementConverter';
+import BMICalculator from './BMICalculator';
+import CurrencyConverter from './CurrencyConverter';
+import HistoryScreen from './HistoryScreen';
+
+const Stack = createStackNavigator();
+
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="MeasurementConverter" component={MeasurementConverter} />
+        <Stack.Screen name="BMICalculator" component={BMICalculator} />
+        <Stack.Screen name="CurrencyConverter" component={CurrencyConverter} />
+        <Stack.Screen name="History" component={HistoryScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;
+
+
+
+
+
+
+
+
