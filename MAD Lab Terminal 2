@@ -38,31 +38,45 @@ export default HomeScreen;
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
 
-const MeasurementConverter = ({ navigation }) => {
+const MeasurementConverter = ({ navigation, route }) => {
   const [length, setLength] = useState('');
   const [weight, setWeight] = useState('');
   const [temperature, setTemperature] = useState('');
   const [convertedValue, setConvertedValue] = useState('');
 
+  const [history, setHistory] = useState(route.params?.history || []);
+
   const convertLength = () => {
     const meters = parseFloat(length);
     if (!isNaN(meters)) {
-      setConvertedValue(`${meters} meters = ${meters * 3.281} feet`);
+      const result = `${meters} meters = ${meters * 3.281} feet`;
+      setConvertedValue(result);
+      saveToHistory(result);
     }
   };
 
   const convertWeight = () => {
     const kg = parseFloat(weight);
     if (!isNaN(kg)) {
-      setConvertedValue(`${kg} kg = ${kg * 2.205} pounds`);
+      const result = `${kg} kg = ${kg * 2.205} pounds`;
+      setConvertedValue(result);
+      saveToHistory(result);
     }
   };
 
   const convertTemperature = () => {
     const celsius = parseFloat(temperature);
     if (!isNaN(celsius)) {
-      setConvertedValue(`${celsius}°C = ${(celsius * 9) / 5 + 32}°F`);
+      const result = `${celsius}°C = ${(celsius * 9) / 5 + 32}°F`;
+      setConvertedValue(result);
+      saveToHistory(result);
     }
+  };
+
+  const saveToHistory = (result) => {
+    const newHistory = [...history, { id: Date.now().toString(), result }];
+    setHistory(newHistory);
+    navigation.setParams({ history: newHistory });  // Pass updated history to the parent
   };
 
   return (
@@ -95,6 +109,8 @@ const MeasurementConverter = ({ navigation }) => {
       <Button title="Convert Temperature" onPress={convertTemperature} />
 
       <Text style={styles.result}>{convertedValue}</Text>
+
+      <Button title="View History" onPress={() => navigation.navigate('History', { history })} />
     </View>
   );
 };
@@ -110,17 +126,20 @@ export default MeasurementConverter;
 
 
 
+
 //BMICalculator.js
 
 
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
 
-const BMICalculator = () => {
+const BMICalculator = ({ navigation, route }) => {
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [bmi, setBmi] = useState('');
   const [category, setCategory] = useState('');
+
+  const [history, setHistory] = useState(route.params?.history || []);
 
   const calculateBMI = () => {
     const weightInKg = parseFloat(weight);
@@ -129,16 +148,22 @@ const BMICalculator = () => {
       const bmiResult = weightInKg / (heightInM * heightInM);
       setBmi(bmiResult.toFixed(1));
 
-      if (bmiResult < 18.5) {
-        setCategory('Underweight');
-      } else if (bmiResult < 24.9) {
-        setCategory('Normal');
-      } else if (bmiResult < 29.9) {
-        setCategory('Overweight');
-      } else {
-        setCategory('Obese');
-      }
+      let category = '';
+      if (bmiResult < 18.5) category = 'Underweight';
+      else if (bmiResult < 24.9) category = 'Normal';
+      else if (bmiResult < 29.9) category = 'Overweight';
+      else category = 'Obese';
+      setCategory(category);
+
+      const result = `BMI: ${bmiResult.toFixed(1)} (${category}) for ${weightInKg}kg and ${height}cm`;
+      saveToHistory(result);
     }
+  };
+
+  const saveToHistory = (result) => {
+    const newHistory = [...history, { id: Date.now().toString(), result }];
+    setHistory(newHistory);
+    navigation.setParams({ history: newHistory });  // Pass updated history to the parent
   };
 
   return (
@@ -159,9 +184,9 @@ const BMICalculator = () => {
       />
       <Button title="Calculate BMI" onPress={calculateBMI} />
 
-      <Text style={styles.result}>
-        BMI: {bmi} ({category})
-      </Text>
+      <Text style={styles.result}>BMI: {bmi} ({category})</Text>
+
+      <Button title="View History" onPress={() => navigation.navigate('History', { history })} />
     </View>
   );
 };
@@ -173,6 +198,7 @@ const styles = StyleSheet.create({
 });
 
 export default BMICalculator;
+
 
 
 //CurrencyConverter.js
