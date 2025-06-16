@@ -202,19 +202,28 @@ export default BMICalculator;
 
 
 //CurrencyConverter.js
-
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
 
-const CurrencyConverter = () => {
+const CurrencyConverter = ({ navigation, route }) => {
   const [amount, setAmount] = useState('');
   const [convertedAmount, setConvertedAmount] = useState('');
+
+  const [history, setHistory] = useState(route.params?.history || []);
 
   const convertCurrency = () => {
     const amountInUSD = parseFloat(amount);
     if (!isNaN(amountInUSD)) {
-      setConvertedAmount(`${amountInUSD} USD = ${amountInUSD * 278.50} PKR`); // Conversion rate
+      const result = `${amountInUSD} USD = ${amountInUSD * 278.50} PKR`; // Conversion rate
+      setConvertedAmount(result);
+      saveToHistory(result);
     }
+  };
+
+  const saveToHistory = (result) => {
+    const newHistory = [...history, { id: Date.now().toString(), result }];
+    setHistory(newHistory);
+    navigation.setParams({ history: newHistory });  // Pass updated history to the parent
   };
 
   return (
@@ -229,6 +238,8 @@ const CurrencyConverter = () => {
       <Button title="Convert Currency" onPress={convertCurrency} />
       
       <Text style={styles.result}>{convertedAmount}</Text>
+
+      <Button title="View History" onPress={() => navigation.navigate('History', { history })} />
     </View>
   );
 };
@@ -258,7 +269,7 @@ const HistoryScreen = ({ route }) => {
         data={history}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <Text style={styles.item}>{item.data}</Text>
+          <Text style={styles.item}>{item.result}</Text>
         )}
       />
       <Button title="Clear History" onPress={clearHistory} />
